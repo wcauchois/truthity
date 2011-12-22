@@ -1,7 +1,12 @@
 
+body {
+  font-family: sans-serif;
+}
+
 div.logo {
   text-align: center;
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 div.logo span {
@@ -11,14 +16,36 @@ div.logo span {
   cursor: default;
 }
 
-div.entry {
+div.container {
   width: 300px;
   margin-left: auto;
   margin-right: auto;
 }
 
-div.entry input {
+div.factPrompt {
+  font-size: 1.3em;
+  cursor: default;
+  margin: 8px;
+  text-align: center;
+}
+
+div.factEntry input[type="text"] {
   width: 85px;
   display: inline;
 }
 
+div.factEntry input[type="submit"] {
+  width: 95px;
+  margin-left: -3px;
+}
+
+div.factEntry div.submit {
+  margin-top: 8px;
+  width: 95px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input.clearDefault {
+  color: #ccc;
+}

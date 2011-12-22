@@ -9,6 +9,24 @@
     <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" type="image/png" href="@asset("public/images/favicon.png")">
     <script src="@asset("public/javascripts/jquery-1.6.4.min.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+$(document).ready(function() {
+  $.each($('.clearDefault'), function(index, input) {
+    input.defaultText = input.value;
+    $(input).blur(function() {
+      if(input.value == "") {
+        input.value = input.defaultText;
+        $(input).addClass('clearDefault');
+      }
+    });
+    $(input).focus(function() {
+      if(input.value == input.defaultText)
+        input.value = "";
+        $(input).removeClass('clearDefault');
+    });
+  });
+});
+    </script>
   </head>
   <body>
     <div class="logo">

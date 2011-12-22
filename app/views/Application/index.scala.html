@@ -1,11 +1,19 @@
 @()
 
 @main("truthity") {
-  <div class="entry">
-    <form>
-        <input class="xlarge cleardefault" type="text" value="noun" />
-        <input class="xlarge cleardefault" type="text" value="verb" />
-        <input class="xlarge cleardefault" type="text" value="object" />
-    </form>
+  <div class="container">
+    <div class="factPrompt">
+    What's a <strong>fact</strong> that is <em>true</em>?
+    </div>
+    <div class="factEntry">
+      <form>
+          <input class="xlarge clearDefault" type="text" value="noun" />
+          <input class="xlarge clearDefault" type="text" value="verb" />
+          <input class="xlarge clearDefault" type="text" value="object" />
+          <div class="submit">
+            <input class="btn primary" type="submit" value="Submit" />
+          </div>
+      </form>
+    </div>
   </div>
 }
