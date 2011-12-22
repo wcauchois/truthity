@@ -1,0 +1,5 @@
+*.swp
+db
+modules
+tmp
+*.log
