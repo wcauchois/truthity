@@ -35,7 +35,9 @@ object Application extends Controller {
 
     def recentFacts = {
       val facts: List[Fact] = SQL("SELECT * FROM Fact").as(Fact*)
-      Json("["+facts.map(_.toJson()).reduceLeft(_+","+_)+"]")
+      Json(if(facts.isEmpty) "[]" else {
+        "["+facts.map(_.toJson()).reduceLeft(_+","+_)+"]"
+      })
     }
 
     def search = Forbidden

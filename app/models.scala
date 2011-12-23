@@ -8,9 +8,10 @@ import java.util.Date
 case class Fact(
     id: Pk[Long], noun: String, verb: String, obj: String, addedAt: Date) {
   
-  def toJson(): String = {
+  def toJson(extra: String = ""): String = {
     val stringify = (key: String, value: String) => "\""+key+"\":\""+value+"\""
-    "{"+stringify("noun", noun)+","+stringify("verb", verb)+","+stringify("obj", obj)+"}"
+    "{"+stringify("id", id.toString)+","+stringify("noun", noun)+","+
+        stringify("verb", verb)+","+stringify("obj", obj)+extra+"}"
   }
 }
 
