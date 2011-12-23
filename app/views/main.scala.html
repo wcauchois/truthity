@@ -1,5 +1,7 @@
 @(title:String = "")(body: => Html)
 
+@searchAction(queryPart: String) = {@action(controllers.Application.search)?@queryPart}
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,10 +10,10 @@
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
     <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" type="image/png" href="@asset("public/images/favicon.png")">
-    <script src="@asset("public/javascripts/jquery-1.6.4.min.js")" type="text/javascript"></script>
+    <script src="@asset("public/javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
     <script type="text/javascript">
 $(document).ready(function() {
-  $.each($('.clearDefault'), function(index, input) {
+  $.each($('.clearDefault'), function(_, input) {
     input.defaultText = input.value;
     $(input).blur(function() {
       if(input.value == "") {
@@ -24,6 +26,28 @@ $(document).ready(function() {
         input.value = "";
         $(input).removeClass('clearDefault');
     });
+  });
+
+  function renderFactList(facts, startAt) {
+    startAt = (startAt == undefined) ? 1 : startAt;
+    var orderedList = $('<ol start="'+startAt+'"></ol>');
+    $.each(facts, function(_, fact) {
+      var listItem = $('<li></li>');
+      $('<a href="@searchAction("noun='+fact.noun+'")" class="part">' +
+          fact.noun + '</a>').appendTo(listItem);
+      $('<a href="@searchAction("verb='+fact.verb+'")" class="part">' +
+          fact.verb + '</a>').appendTo(listItem);
+      $('<a href="@searchAction("obj='+fact.obj+'")" class="part">' +
+          fact.obj + '</a>').appendTo(listItem);
+      $('<span class="votey">[<a href="#">+</a>/<a href="#">-</a>]</span>')
+          .appendTo(listItem);
+      listItem.appendTo(orderedList);
+    });
+    return orderedList;
+  }
+
+  $.getJSON('@action(controllers.Application.recentFacts)', function(data) {
+    renderFactList(data, 1).appendTo($('#list'));
   });
 });
     </script>

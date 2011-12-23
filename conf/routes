@@ -5,6 +5,10 @@
 # Home page
 GET     /                                       Application.index
 
+POST    /                                       Application.addFact
+
+GET     /recentFacts                            Application.recentFacts
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

@@ -1,19 +1,53 @@
-@()
+@()(implicit flash: play.mvc.Scope.Flash)
+
+@displayFlash(flash: play.mvc.Scope.Flash) = {
+  @if(flash.get("warning")) {
+    <div class="alert-message warning">
+      <a class="close" href="#">x</a>
+      @flash.get("warning")
+    </div>
+  }
+  @if(flash.get("success")) {
+    <div class="alert-message success">
+      <a class="close" href="#">x</a>
+      @flash.get("success")
+    </div>
+  }
+}
 
 @main("truthity") {
   <div class="container">
-    <div class="factPrompt">
+    @displayFlash(flash)
+    <div class="prompt">
     What's a <strong>fact</strong> that is <em>true</em>?
     </div>
-    <div class="factEntry">
-      <form>
-          <input class="xlarge clearDefault" type="text" value="noun" />
-          <input class="xlarge clearDefault" type="text" value="verb" />
-          <input class="xlarge clearDefault" type="text" value="object" />
+    <div class="entry">
+      <form action="@action(controllers.Application.addFact)" method="POST">
+          <input class="xlarge clearDefault" type="text" name="noun" value="noun" />
+          <input class="xlarge clearDefault" type="text" name="verb" value="verb" />
+          <input class="xlarge clearDefault" type="text" name="obj" value="object" />
           <div class="submit">
             <input class="btn primary" type="submit" value="Submit" />
           </div>
       </form>
+    </div>
+
+    <div class="content">
+      <ul class="tabs">
+        <li class="active"><a href="#">Recent</a></li>
+        <li><a href="#">Trending</a></li>
+        <li><a href="#">Top</a></li>
+      </ul>
+      <div id="list"></div>
+      <div class="pagination">
+        <ul>
+          <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+          <li class="active"><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li class="next"><a href="#">Next &rarr;</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 }

@@ -12,7 +12,7 @@ div.logo {
 div.logo span {
   font-family: 'Damion', cursive;
   font-size: 5em;
-  color: #E54794;
+  color: #CD0064;
   cursor: default;
 }
 
@@ -22,24 +22,24 @@ div.container {
   margin-right: auto;
 }
 
-div.factPrompt {
-  font-size: 1.3em;
+div.prompt {
   cursor: default;
   margin: 8px;
   text-align: center;
+  font-size: 1.4em;
 }
 
-div.factEntry input[type="text"] {
+div.entry input[type="text"] {
   width: 85px;
   display: inline;
 }
 
-div.factEntry input[type="submit"] {
+div.entry input[type="submit"] {
   width: 95px;
   margin-left: -3px;
 }
 
-div.factEntry div.submit {
+div.entry div.submit {
   margin-top: 8px;
   width: 95px;
   margin-left: auto;
@@ -49,3 +49,36 @@ div.factEntry div.submit {
 input.clearDefault {
   color: #ccc;
 }
+
+a.part {
+  padding: 3px;
+  color: black;
+}
+
+a.part:hover {
+  border-radius: 3px;
+  background-color: black;
+  text-decoration: none;
+  color: white;
+}
+
+div.content {
+  margin-top: 40px;
+}
+
+#list {
+  font-size: 1.2em;
+}
+
+#list li {
+  margin-bottom: 5px;
+}
+
+span.votey {
+  padding-left: 4px;
+}
+
+span.votey a {
+  padding: 3px;
+}
+
