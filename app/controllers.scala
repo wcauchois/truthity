@@ -2,7 +2,6 @@ package controllers
 
 import play._
 import play.mvc._
-import play.mvc.results.Result
 import play.db.anorm._
 import play.db.anorm.defaults._
 import play.db.anorm.SqlParser._
@@ -27,22 +26,31 @@ object Application extends Controller {
         flash += ("warning" -> "That fact already exists in the database")
       } else {
         Fact.create(Fact(NotAssigned,
-                         params.get("noun"),
-                         params.get("verb"),
-                         params.get("obj"),
+                         params.get("noun").trim,
+                         params.get("verb").trim,
+                         params.get("obj").trim,
                          new Date()))
         flash += ("success" -> "Fact was added to the database")
       }
       Action(index)
     }
     
-    def vote(dir: String): Result = {
-      if(params.get("id") == "") {
-        return BadRequest
-      } else if(dir != "up" && dir != "down") {
-        return NotFound
+    def vote(dir: String) = {
+      if(params.get("id") == "")              BadRequest
+      else if(dir != "up" && dir != "down")   NotFound
+      else {
+        Vote.delete("remoteAddress={remoteAddress} AND factId={id}")
+            .onParams(request.remoteAddress, params.get("id"))
+            .execute()
+        Vote.create(Vote(NotAssigned,
+                         params.get("id").toInt,
+                         if(dir == "up") { 1 } else { -1 },
+                         new Date(),
+                         request.remoteAddress))
+        val score = SQL("SELECT SUM(value) FROM Vote WHERE factId={id}")
+                      .onParams(params.get("id")).as(scalar[Long])
+        Json("{\"score\":"+score+"}")
       }
-      NoContent
     }
 
     def recentFacts = {
