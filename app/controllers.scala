@@ -36,7 +36,7 @@ object Application extends Controller {
     }
     
     def vote(dir: String) = {
-      if(params.get("id") == "")              BadRequest
+      if(params.get("id").isEmpty)            BadRequest
       else if(dir != "up" && dir != "down")   NotFound
       else {
         Vote.delete("remoteAddress={remoteAddress} AND factId={id}")
@@ -54,9 +54,16 @@ object Application extends Controller {
     }
 
     def recentFacts = {
-      val facts: List[Fact] = SQL("SELECT * FROM Fact ORDER BY addedAt DESC").as(Fact*)
-      Json(if(facts.isEmpty) "[]" else {
-        "["+facts.map(_.toJson()).reduceLeft(_+","+_)+"]"
+      val result: List[Fact~Long] =
+        SQL("""
+          SELECT Fact.*,
+            COALESCE(SELECT SUM(value) FROM Vote WHERE factId=Fact.id, 0) as score
+          FROM Fact ORDER BY addedAt DESC
+        """).as(Fact ~< long("score") *)
+      Json(if(result.isEmpty) "[]" else {
+        "["+result.map(_ match {
+          case fact ~ votes => fact.toJson(",\"votes\":"+votes)
+        }).reduceLeft(_+","+_)+"]"
       })
     }
 
