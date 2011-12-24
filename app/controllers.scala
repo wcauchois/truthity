@@ -2,6 +2,7 @@ package controllers
 
 import play._
 import play.mvc._
+import play.mvc.results.Result
 import play.db.anorm._
 import play.db.anorm.defaults._
 import play.db.anorm.SqlParser._
@@ -11,6 +12,8 @@ import models._
 object Application extends Controller {
     
     import views.Application._
+
+    val factsPerPage: Int = 10
     
     def index = html.index()
 
@@ -32,9 +35,18 @@ object Application extends Controller {
       }
       Action(index)
     }
+    
+    def vote(dir: String): Result = {
+      if(params.get("id") == "") {
+        return BadRequest
+      } else if(dir != "up" && dir != "down") {
+        return NotFound
+      }
+      NoContent
+    }
 
     def recentFacts = {
-      val facts: List[Fact] = SQL("SELECT * FROM Fact").as(Fact*)
+      val facts: List[Fact] = SQL("SELECT * FROM Fact ORDER BY addedAt DESC").as(Fact*)
       Json(if(facts.isEmpty) "[]" else {
         "["+facts.map(_.toJson()).reduceLeft(_+","+_)+"]"
       })

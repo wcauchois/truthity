@@ -12,6 +12,35 @@
     <link rel="shortcut icon" type="image/png" href="@asset("public/images/favicon.png")">
     <script src="@asset("public/javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
     <script type="text/javascript">
+function renderFactList(facts, startAt) {
+  startAt = (startAt == undefined) ? 1 : startAt;
+  var orderedList = $('<ol start="'+startAt+'"></ol>');
+  $.each(facts, function(_, fact) {
+    var listItem = $('<li id="'+fact.id+'"></li>');
+    $('<a href="@searchAction("noun='+fact.noun+'")" class="part">' +
+        fact.noun + '</a>').appendTo(listItem);
+    $('<a href="@searchAction("verb='+fact.verb+'")" class="part">' +
+        fact.verb + '</a>').appendTo(listItem);
+    $('<a href="@searchAction("obj='+fact.obj+'")" class="part">' +
+        fact.obj + '</a>').appendTo(listItem);
+    $('<span class="votey">' +
+        '[<a href="#" class="up" onclick="voteUp('+fact.id+')">+</a>' +
+        '/<a href="#" class="down" onclick="voteDown('+fact.id+')">-</a>' +
+        ']</span>').appendTo(listItem);
+    listItem.appendTo(orderedList);
+  });
+  return orderedList;
+}
+
+function voteUp(id) {
+  $('#'+id+' .votey .up').addClass('marked');
+  $('#'+id+' .votey .down').removeClass('marked');
+}
+function voteDown(id) {
+  $('#'+id+' .votey .down').addClass('marked');
+  $('#'+id+' .votey .up').removeClass('marked');
+}
+
 $(document).ready(function() {
   $.each($('.clearDefault'), function(_, input) {
     input.defaultText = input.value;
@@ -27,24 +56,6 @@ $(document).ready(function() {
         $(input).removeClass('clearDefault');
     });
   });
-
-  function renderFactList(facts, startAt) {
-    startAt = (startAt == undefined) ? 1 : startAt;
-    var orderedList = $('<ol start="'+startAt+'"></ol>');
-    $.each(facts, function(_, fact) {
-      var listItem = $('<li></li>');
-      $('<a href="@searchAction("noun='+fact.noun+'")" class="part">' +
-          fact.noun + '</a>').appendTo(listItem);
-      $('<a href="@searchAction("verb='+fact.verb+'")" class="part">' +
-          fact.verb + '</a>').appendTo(listItem);
-      $('<a href="@searchAction("obj='+fact.obj+'")" class="part">' +
-          fact.obj + '</a>').appendTo(listItem);
-      $('<span class="votey">[<a href="#">+</a>/<a href="#">-</a>]</span>')
-          .appendTo(listItem);
-      listItem.appendTo(orderedList);
-    });
-    return orderedList;
-  }
 
   $.getJSON('@action(controllers.Application.recentFacts)', function(data) {
     renderFactList(data, 1).appendTo($('#list'));

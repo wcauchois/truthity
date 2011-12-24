@@ -16,3 +16,10 @@ case class Fact(
 }
 
 object Fact extends Magic[Fact]
+
+case class Vote(
+  id: Pk[Long], factId: Long, value: Int, votedAt: Date, remoteAddress: String
+)
+
+object Vote extends Magic[Vote]
+

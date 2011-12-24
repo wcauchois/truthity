@@ -82,3 +82,6 @@ span.votey a {
   padding: 3px;
 }
 
+span.votey .marked {
+  font-weight: bold;
+}
