@@ -36,7 +36,7 @@ object Application extends Controller {
     }
     
     def vote(dir: String) = {
-      if(params.get("id").isEmpty)            BadRequest
+      if(params.get("id") == null)            BadRequest
       else if(dir != "up" && dir != "down")   NotFound
       else {
         Vote.delete("remoteAddress={remoteAddress} AND factId={id}")
@@ -58,8 +58,10 @@ object Application extends Controller {
         SQL("""
           SELECT Fact.*,
             COALESCE(SELECT SUM(value) FROM Vote WHERE factId=Fact.id, 0) as score
-          FROM Fact ORDER BY addedAt DESC
-        """).as(Fact ~< long("score") *)
+          FROM Fact ORDER BY addedAt DESC LIMIT {start},{factsPerPage}
+        """).on("start" -> (if(params.get("start") == null) { 0 } else { params.get("start") }),
+                "factsPerPage" -> factsPerPage)
+            .as(Fact ~< long("score") *)
       Json(if(result.isEmpty) "[]" else {
         "["+result.map(_ match {
           case fact ~ votes => fact.toJson(",\"votes\":"+votes)
