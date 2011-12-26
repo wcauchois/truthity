@@ -40,7 +40,7 @@ function voteDown(id) {
   $('#'+id+' .votey .down').addClass('marked');
   $('#'+id+' .votey .up').removeClass('marked');
 }
-
+var factsPerPage = @models.Constants.factsPerPage;
 $(document).ready(function() {
   $.each($('.clearDefault'), function(_, input) {
     input.defaultText = input.value;
@@ -60,7 +60,30 @@ $(document).ready(function() {
   $.getJSON('@action(controllers.Application.recentFacts)', function(data) {
     renderFactList(data, 1).appendTo($('#list'));
   });
+
+  var factCount, pageCount;
+  $.getJSON('@action(controllers.Application.factCount)', function(data) {
+    factCount = data.count;
+    pageCount = Math.round(factCount / factsPerPage + 0.5);
+    var $firstButton = $('#pages :first-child').next();
+    for(var i = Math.min(3, pageCount); i >= 2; i--) {
+      var $button = $('<li id="pageButton-'+i+'">' +
+          '<a href="#" onclick="switchPage("'+i+')">'+i+'</a></li>');
+      $firstButton.after($button);
+    }
+  });
 });
+var currentPage = 1;
+def switchPage(n) {
+}
+def nextPage() {
+  if(currentPage < pageCount)
+    switchPage(currentPage + 1);
+}
+def prevPage() {
+  if(currentPage > 1)
+    switchPage(currentPage - 1);
+}
     </script>
   </head>
   <body>

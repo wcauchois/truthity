@@ -9,6 +9,8 @@ POST    /                                       Application.addFact
 
 GET     /recentFacts                            Application.recentFacts
 
+GET     /factCount                              Application.factCount
+
 GET     /vote/{dir}                             Application.vote
 
 # Ignore favicon requests

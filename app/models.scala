@@ -23,3 +23,6 @@ case class Vote(
 
 object Vote extends Magic[Vote]
 
+object Constants {
+  val factsPerPage: Int = 3 // XXX: for testing pagination
+}
